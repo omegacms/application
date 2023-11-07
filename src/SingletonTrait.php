@@ -27,12 +27,12 @@ use Omega\Application\Exceptions\SingletonException;
 /**
  * Singleton trait.
  *
- * This `SingletonTrait`provides a convenient way to implement the Singleton design 
- * pattern in PHP. When a class uses this trait, it ensures that only one instance 
- * of the class is created and provides a static method to access that instance. 
- * 
- * Usage: 
- * - Simply add `use Singleton;` to your class. 
+ * This `SingletonTrait`provides a convenient way to implement the Singleton design
+ * pattern in PHP. When a class uses this trait, it ensures that only one instance
+ * of the class is created and provides a static method to access that instance.
+ *
+ * Usage:
+ * - Simply add `use Singleton;` to your class.
  * - Access the singleton instance using `YourClass::getInstance()`.
  *
  * @category    Omega
@@ -52,13 +52,13 @@ trait SingletonTrait
      */
     private static mixed $instances;
 
-    /** 
-     * Get the singleton instance. 
-     * 
-     * This method returns the singleton instance of the class. If an instance 
-     * doesn't exist, it creates one and returns it. 
-     * 
-     * @return mixed Return the singleton instance. 
+    /**
+     * Get the singleton instance.
+     *
+     * This method returns the singleton instance of the class. If an instance
+     * doesn't exist, it creates one and returns it.
+     *
+     * @return mixed Return the singleton instance.
      */
     public static function getInstance() : mixed
     {
@@ -71,24 +71,24 @@ trait SingletonTrait
         return self::$instances[ $getCalledClass ];
     }
 
-    /** 
-     * SingletonTrait private constructor. 
-     * 
-     * This constructor is declared as private to prevent external instantiation 
-     * of the class. The singleton instance should be accessed via `getInstance()`. 
-     * 
-     * @return void 
+    /**
+     * SingletonTrait private constructor.
+     *
+     * This constructor is declared as private to prevent external instantiation
+     * of the class. The singleton instance should be accessed via `getInstance()`.
+     *
+     * @return void
      */
     protected function __construct() {}
 
-    /** 
-     * Clone method. 
-     * 
-     * This method is overridden to prevent cloning of the singleton instance. 
-     * Cloning would create a second instance, which violates the Singleton pattern. 
-     * 
-     * @return void 
-     * @throws SingletonException If an attempt to clone the singleton is made. 
+    /**
+     * Clone method.
+     *
+     * This method is overridden to prevent cloning of the singleton instance.
+     * Cloning would create a second instance, which violates the Singleton pattern.
+     *
+     * @return void
+     * @throws SingletonException If an attempt to clone the singleton is made.
      */
     public function __clone() : void
     {
@@ -97,14 +97,14 @@ trait SingletonTrait
         );
     }
 
-    /** 
-     * Wakeup method. 
-     * 
-     * This method is overridden to prevent deserialization of the singleton instance. 
-     * Deserialization would create a second instance, which violates the Singleton pattern. 
-     * 
-     * @return void 
-     * @throws SingletonException If an attempt at deserialization is made. 
+    /**
+     * Wakeup method.
+     *
+     * This method is overridden to prevent deserialization of the singleton instance.
+     * Deserialization would create a second instance, which violates the Singleton pattern.
+     *
+     * @return void
+     * @throws SingletonException If an attempt at deserialization is made.
      */
     public function __wakeup() : void
     {
@@ -113,14 +113,14 @@ trait SingletonTrait
         );
     }
 
-    /** 
-     * Sleep method. 
-     * 
-     * This method is overridden to prevent serialization of the singleton instance. 
-     * Serialization would create a second instance, which violates the Singleton pattern. 
-     * 
+    /**
+     * Sleep method.
+     *
+     * This method is overridden to prevent serialization of the singleton instance.
+     * Serialization would create a second instance, which violates the Singleton pattern.
+     *
      * @return array Return the names of private properties in parent classes.
-     * @throws SingletonException If an attempt at serialization is made. 
+     * @throws SingletonException If an attempt at serialization is made.
      */
     public function __sleep() : array
     {

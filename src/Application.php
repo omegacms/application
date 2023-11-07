@@ -34,7 +34,7 @@ use Omega\Routing\Router;
  * Base application class.
  *
  * This `Application` class represents the main entry point of the Omega framework.
- * It manages the application's lifecycle, including configuration, routing, and 
+ * It manages the application's lifecycle, including configuration, routing, and
  * handling HTTP requests.
  *
  * @category    Omega
@@ -49,15 +49,14 @@ class Application extends Container
 {
     use SingletonTrait;
 
-    /** 
-     * Run the application. 
-     * 
-     * This method starts and runs the OSPress application. It handles the 
-     * entire application lifecycle, including session management, configuration 
-     * setup, routing, and processing HTTP requests. 
-     * 
-     * @return Response Return an instance of Response representing the application's response. 
-     * @throws Throwable If an error occurs during application execution. 
+    /**
+     * Run the application.
+     *
+     * This method starts and runs the OSPress application. It handles the entire application lifecycle,
+     * including session management, configuration setup, routing, and processing HTTP requests.
+     *
+     * @return Response Return an instance of Response representing the application's response.
+     * @throws Throwable If an error occurs during application execution.
      */
     public function run() : Response
     {
@@ -73,14 +72,14 @@ class Application extends Container
         return $this->dispatch( $basePath );
     }
 
-    /** 
-     * Configure the application. 
-     * 
-     * This method sets up the application's configuration by loading environment 
-     * variables from Dotenv. 
-     * 
-     * @param  string $basePath Holds the base path of the application. 
-     * @return void 
+    /**
+     * Configure the application.
+     *
+     * This method sets up the application's configuration by loading environment
+     * variables from Dotenv.
+     *
+     * @param  string $basePath Holds the base path of the application.
+     * @return void
      */
     private function configure( string $basePath ) : void
     {
@@ -88,14 +87,14 @@ class Application extends Container
         $dotenv->load();
     }
 
-    /** 
-     * Bind providers to the application. 
-     * 
-     * This method binds service providers to the application, allowing them 
-     * to register services and perform any necessary setup. 
-     * 
-     * @param  string $basePath The base path of the application. 
-     * @return void 
+    /**
+     * Bind providers to the application.
+     *
+     * This method binds service providers to the application, allowing them
+     * to register services and perform any necessary setup.
+     *
+     * @param  string $basePath The base path of the application.
+     * @return void
      */
     private function bindProviders( string $basePath ) : void
     {
@@ -110,15 +109,15 @@ class Application extends Container
         }
     }
 
-    /** 
-     * Dispatch the application. 
-     * 
-     * This method dispatches the application, including routing setup and 
-     * handling of HTTP requests. 
-     * 
-     * @param  string $basePath The base path of the application. 
-     * @return Response An instance of Response representing the application's response. 
-     * @throws Throwable If an error occurs during dispatching. 
+    /**
+     * Dispatch the application.
+     *
+     * This method dispatches the application, including routing setup and
+     * handling of HTTP requests.
+     *
+     * @param  string $basePath The base path of the application.
+     * @return Response An instance of Response representing the application's response.
+     * @throws Throwable If an error occurs during dispatching.
      */
     private function dispatch( string $basePath ) : Response
     {

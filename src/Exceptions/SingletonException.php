@@ -24,12 +24,12 @@ namespace Omega\Application\Exceptions;
 use Exception;
 
 /**
- * Singleton exception. 
- * 
- * The `SingletonException` is thrown when there is an issue related to the 
- * Singleton pattern implementation. It typically represents situations where 
- * multiple instances of a Singleton class are attempted to be created or other 
- * violations of the Singleton pattern. 
+ * Singleton exception.
+ *
+ * The `SingletonException` is thrown when there is an issue related to the
+ * Singleton pattern implementation. It typically represents situations where
+ * multiple instances of a Singleton class are attempted to be created or other
+ * violations of the Singleton pattern.
  *
  * @category    Omega
  * @package     Omega\Singleton
