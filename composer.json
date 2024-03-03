@@ -1,0 +1,42 @@
+{
+  "name": "omegacms/application",
+  "type": "package",
+  "description": "Omega CMS Application Package",
+  "keywords": [ "omegacms", "framework", "application"],
+  "homepage": "https://omegacms.github.io",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Adriano Giovannini",
+      "email": "omegacms@outlook.com",
+      "homepage": "https://omegacms.github.io",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "omegacms/container": "^1.0.0",
+    "omegacms/http": "^1.0.0",
+    "omegacms/routing": "^1.0.0",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "require-dev": {
+    "omegacms/testing": "^1.0.0",
+    "phpunit/phpunit": "^9.5",
+    "symfony/process": "^5.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Omega\\Application\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Omega\\Application\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "minimum-stability": "stable"
+}
