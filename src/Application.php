@@ -45,7 +45,7 @@ use Omega\Routing\Router;
  * @license     https://www.gnu.org/licenses/gpl-3.0-standalone.html     GPL V3.0+
  * @version     1.0.0
  */
-class Application extends Container implements ApplicationInterface
+class Application extends Container
 {
     use SingletonTrait;
     //use WebApplicationTrait;
@@ -245,10 +245,10 @@ class Application extends Container implements ApplicationInterface
      * @param  string $path Holds the application path.
      * @return string Return the path of OmegaCMS istallation.
      */
-    /**public function getBasePath( string $path = '' ) : string
+    public function getBasePath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->basePath, $path );
-    }*/
+    }
 
     /**
      * Get the path to the bootstrap directory.
