@@ -22,9 +22,10 @@ namespace Omega\Application;
  * @use
  */
 use function method_exists;
+use function Omega\Helpers\env;
+use function Omega\Helpers\join_paths;
 use Throwable;
 use Dotenv\Dotenv;
-use Omega\Application\Exceptions\SingletonException;
 use Omega\Container\Container;
 use Omega\Http\Response;
 use Omega\Routing\Router;
@@ -46,26 +47,79 @@ use Omega\Routing\Router;
  */
 class Application extends Container implements ApplicationInterface
 {
-    /**
-     * Singleton instance.
-     *
-     * @var mixed $instances Holds the singleton instances.
-     */
-    private static mixed $instances;
+    use SingletonTrait;
+    //use WebApplicationTrait;
 
     /**
-     * The application version.
+     * The Omega framework version.
      *
      * @var string
      */
-    public const VERSION = '1.0.0';
+    private const VERSION = '1.0.0';
 
     /**
-     * The base path for the Omega installation.
-     *
-     * @var string $basePath Holds the base path for the Omega installation.
+     * The custom application path defined by the developer.
+     * 
+     * @var ?string $appPath Holds the custom application path defined by developer.
      */
-    protected string $basePath;
+    protected ?string $applicationPath;
+
+    /**
+     * The base path for the OmegaCMS installation.
+     * 
+     * @var ?string $basePath Holds the base path for the OmegaCMS installation.
+     */
+    protected ?string $basePath;
+
+    /**
+     * The custom application path defined by the developer.
+     * 
+     * @var ?string $bootstrapPath Holds the custom application path defined by developer.
+     */
+    protected ?string $bootstrapPath;
+
+    /**
+     * The custom configuration path defined by the developer.
+     * 
+     * @var ?string $configPath Holds the custom configuration path defined by the developer.
+     */
+    protected ?string $configPath;
+    #endregion
+
+    /**
+     * The custom database path defined by the developer.
+     * 
+     * @var ?string $databasePath Holds the custom database path defined by the develiper.
+     */
+    protected ?string $databasePath;
+
+    /**
+     * The environment file to load during bootstrapping.
+     *
+     * @var string $environmentFile Holds the environment file to load during bootstrapping.
+     */
+    protected string $environmentFile = '.env';
+
+    /**
+     * The custom environment path defined by the developer.
+     * 
+     * @var ?string $environmentPath Holds the custom environment path defined by the developer.
+     */
+    protected ?string $environmentPath;
+
+    /**
+     * The custom language path defined by the developer.
+     * 
+     * @var ?string $environmentPath Holds the custom language path defined by the developer.
+     */
+    protected ?string $langPath;
+
+    /**
+     * The custom public path defined by the developer.
+     * 
+     * @var ?string $environmentPath Holds the custom public path defined by the developer.
+     */
+    protected ?string $publicPath;
 
     /**
      * Application class constructor.
@@ -83,59 +137,6 @@ class Application extends Container implements ApplicationInterface
 
         $this->configure( $this->getBasePath() );
         $this->bindProviders( $this->getBasePath() );
-    }
-
-    /**
-     * Get the singleton instance.
-     *
-     * This method returns the singleton instance of the class. If an instance
-     * doesn't exist, it creates one and returns it.
-     *
-     * @param  ?string $basePath Holds the Omega application base path or null.
-     * @return mixed Return the singleton instance.
-     */
-    public static function getInstance( ?string $basePath = null ) : mixed
-    {
-        $getCalledClass = get_called_class();
-
-        if ( ! isset( self::$instances[ $getCalledClass ] ) ) {
-            self::$instances[ $getCalledClass ] = new $getCalledClass( $basePath );
-        }
-
-        return self::$instances[ $getCalledClass ];
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return string Return the version number of application.
-     */
-    public function getVersion() : string
-    {
-        return static::VERSION;
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @param  string $basePath Holds the base path for the application.
-     * @return $this
-     */
-    public function setBasePath( string $basePath ) : self
-    {
-        $this->basePath = rtrim( $basePath, '\/' );
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return string Return the base path for the application.
-     */
-    public function getBasePath() : string
-    {
-        return (string)$this->basePath;
     }
 
     /**
@@ -218,50 +219,352 @@ class Application extends Container implements ApplicationInterface
     }
 
     /**
-     * Clone method.
-     *
-     * This method is overridden to prevent cloning of the singleton instance.
-     * Cloning would create a second instance, which violates the Singleton pattern.
-     *
-     * @return void
-     * @throws SingletonException If an attempt to clone the singleton is made.
+     * Get the version of the application.
+     * 
+     * @return string Return the version of the application.
      */
-    public function __clone() : void
+    public function getVersion() : string
     {
-        throw new SingletonException(
-            'You can not clone a singleton.'
-        );
+        return static::VERSION;
     }
 
     /**
-     * Wakeup method.
-     *
-     * This method is overridden to prevent deserialization of the singleton instance.
-     * Deserialization would create a second instance, which violates the Singleton pattern.
-     *
-     * @return void
-     * @throws SingletonException If an attempt at deserialization is made.
+     * Get the path to the application 'app' directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path for 'app' directory.
      */
-    public function __wakeup() : void
+    public function getApplicationPath( ?string $path = '' ) : string
     {
-        throw new SingletonException(
-            'You can not deserialize a singleton.'
-        );
+        return $this->joinPaths( $this->applicationPath ?: $this->basePath( 'app' ), $path );
     }
 
     /**
-     * Sleep method.
-     *
-     * This method is overridden to prevent serialization of the singleton instance.
-     * Serialization would create a second instance, which violates the Singleton pattern.
-     *
-     * @return array Return the names of private properties in parent classes.
-     * @throws SingletonException If an attempt at serialization is made.
+     * Get the base path of the OmegaCMS installation.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path of OmegaCMS istallation.
      */
-    public function __sleep() : array
+    /**public function getBasePath( string $path = '' ) : string
     {
-        throw new SingletonException(
-            'You can not serialize a singleton.'
-        );
+        return $this->joinPaths( $this->basePath, $path );
+    }*/
+
+    /**
+     * Get the path to the bootstrap directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path for 'app' directory.
+     */
+    public function getBootstrapPath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->bootstrapPath, $path );
+    }
+
+    /**
+     * Get the path to the application configuration files.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path for the configuration files.
+     */
+    public function getConfigPath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->configPath ?: $this->basePath( 'config' ), $path );
+    }
+
+    /**
+     * Get the path to the database directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path for the configuration files.
+     */
+    public function getDatabasePath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->databasePath ?: $this->basePath( 'database' ), $path );
+    }
+
+    /**
+     * Get or check the current application environment.
+     * 
+     * @param  string|array ...$environments
+     * @return string|bool
+     */
+    public function environment( string|arrat ...$environments ) : string|bool
+    {
+        if ( count( $environments ) > 0 ) {
+            $patterns = is_array( $environments[ 0 ] ) ? $environments[ 0 ] : $environments;
+
+            return Str::is( $patterns, $this[ 'env' ] );
+        }
+
+        return $this[ 'env' ];
+    }
+
+    /**
+     * Get the environment file the application is using.
+     * 
+     * @return string Return the environment file the application using.
+     */
+    public function getEnvironmentFile() : string
+    {
+        return $this-environmentFile ?: '.env';
+    }
+
+    /**
+     * Get the fully qualified path to the environment file.
+     * 
+     * @return string Return the fully qualified path to the environment file.
+     */
+    public function getEnvironmentFilePath() : string
+    {
+        return $this->environmentPath() . DIRECTORY_SEPARATOR . $this->environmentFile();
+    }
+
+    /**
+     * Get the path to the environment file directory.
+     * 
+     * @return string Return the path to the environment file directory.
+     */
+    public function getEnvironmentPath() : string
+    {
+        return $this->environmentPath ?: $this->basePath;
+    }
+
+    /**
+     * Get the path to the language file directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path to the language file directory.
+     */
+    public function getLangPath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->langPath, $path );
+    }
+
+    /**
+     * Get the path to the public / web directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path to the public / web file directory.
+     */
+    public function getPublicPath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->publicPath ?: $this->basePath( 'public' ), $path );
+    }
+
+    /**
+     * Get the path to the resources directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path to the resources file directory.
+     */
+    public function getResourcePath( string $path = '' ) : string
+    {
+        return $this->joinPaths( $this->basePath( 'resources' ), $path );
+    }
+
+    /**
+     * Get the path to the public / web directory.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path to the storage file directory.
+     */
+    public function getStoragePath( string $path = '' ) : string
+    {
+        if ( isset( $_ENV[ 'OMEGA_STORAGE_PATH' ] ) ) {
+            return $this->joinPaths( $this->storagePath ?: $_ENV[ 'OMEGA_STORAGE_PATH' ], $path );
+        }
+
+        return $this->joinPaths( $this->storagePath ?: $this->basePath( 'storage' ), $path );
+    }
+
+    /**
+     * Get the path of the view directory.
+     * 
+     * This method returns the first configured path in the array of view paths.
+     * 
+     * @param  string $path Holds the application path.
+     * @return string Return the path to the view directory.
+     */
+    public function getViewPath( string $path = '' ) : string
+    {
+        $viewPath = rtrim( $this[ 'config' ]->get( 'view.paths' )[ 0 ], DIRECTORY_SEPARATOR );
+
+        return $this->joinPaths( $viewPath, $path );
+    }
+
+    /**
+     * Set the application directory.
+     * 
+     * @param  string $path Holds the path to set.
+     * @return $this
+     */
+    public function setApplicationPath( string $path ) : self
+    {
+        $this->applicationPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the base path for OmegaCMS installation.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setBasePath( string $basePath ) : self
+    {
+        $this->basePath = rtrim( $basePath, '\/' );
+
+        return $this;
+    }
+
+    /**
+     * Set bootstrap file directory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setBootstrapPath( string $path ) : self
+    {
+        $this->bootstrapPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the configuration directory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setConfigPath( string $path ) : self
+    {
+        $this->configPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the database diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setDatabasePath( string $path ) : self
+    {
+        $this->databasePath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the environment file to be loading during bootstrapping.
+     * 
+     * @param  string $file Holds the environment file to be loading during bootstrappng.
+     * @return $this
+     */
+    public function setEnvironmentFile( string $file ) : self
+    {
+        $this->environmentFile = $file;
+
+        return $this;
+    }
+
+    /**
+     * Set the environment diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setEnvironmentPath( string $path ) : self
+    {
+        $this->environmentPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the lang diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setLangPath( string $path ) : self
+    {
+        $this->langPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the public diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setPublicPath( string $path ) : self
+    {
+        $this->publicPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the storage diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setStoragePath( string $path ) : self
+    {
+        $this->storagePath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the application is in rhe local environment.
+     * 
+     * @return bool Return true if the application is in local environment.
+     */
+    public function isLocal() : bool
+    {
+        return $this[ 'env' ] === 'local';
+    }
+
+    /**
+     * Determine if the application is in the production environment.
+     * 
+     * @return bool Return true if the application is in the production environment.
+     */
+    public function isProduction() : bool
+    {
+        return $this[ 'env' ] === 'production';
+    }
+
+    /**
+     * Detect the application's current environment.
+     * 
+     * @param  Closure $callback
+     * @return string
+     */
+    public function detectEnvironment( Closure $callback ) : string
+    {
+        $args = $_SERVER[ 'argv' ] ?? null;
+
+        return $this[ 'env' ] = ( new EnvironmentDetector )->detect( $callback, $args );
+    }
+
+    /**
+     * Join the given paths.
+     * 
+     * @param  ?string $basePath Holds the base path to join.
+     * @param  string  $path     Holds the path to join.
+     * @return string Return the joined paths.
+     */
+    public function joinPaths( ?string $basePath, string $path = '' ) : string
+    {
+        return join_paths( $basePath, $path );
     }
 }

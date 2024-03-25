@@ -51,4 +51,20 @@ interface ApplicationInterface
      * @return string Return the base path for the application.
      */
     public function getBasePath() : string;
+
+    /**
+     * Get the path to the application configuration folder.
+     * 
+     * @param  ?string $path (Optionally) Holds the path to append config path.
+     * @return string Return the path to the configuration folder. 
+     */
+    public function getConfigPath( ?string $path = '' ) : string;
+
+    /**
+     * Get the path to the database directory.
+     * 
+     * @param  ?string $path (Optionally) Holds the path to append database path.
+     * @return string Return the path to the database folder.
+     */
+    public function getDatabasePath( ?string $path = '' ) : string;
 }
