@@ -91,7 +91,7 @@ class Application extends Container
      * 
      * @var ?string $databasePath Holds the custom database path defined by the develiper.
      */
-    protected ?string $databasePath;
+    protected ?string $databasePath = '';
 
     /**
      * The environment file to load during bootstrapping.
@@ -245,7 +245,7 @@ class Application extends Container
      * @param  string $path Holds the application path.
      * @return string Return the path of OmegaCMS istallation.
      */
-    public function getBasePath( string $path = '' ) : string
+    public function getBasePath( ?string $path = '' ) : string
     {
         return $this->joinPaths( $this->basePath, $path );
     }
@@ -256,7 +256,7 @@ class Application extends Container
      * @param  string $path Holds the application path.
      * @return string Return the path for 'app' directory.
      */
-    public function getBootstrapPath( string $path = '' ) : string
+    public function getBootstrapPath( ?string $path = '' ) : string
     {
         return $this->joinPaths( $this->bootstrapPath, $path );
     }
@@ -267,9 +267,9 @@ class Application extends Container
      * @param  string $path Holds the application path.
      * @return string Return the path for the configuration files.
      */
-    public function getConfigPath( string $path = '' ) : string
+    public function getConfigPath( ?string $path = '' ) : string
     {
-        return $this->joinPaths( $this->configPath ?: $this->basePath( 'config' ), $path );
+        return $this->joinPaths( $this->configPath ?: $this->getBasePath( 'config' ), $path );
     }
 
     /**
@@ -278,9 +278,9 @@ class Application extends Container
      * @param  string $path Holds the application path.
      * @return string Return the path for the configuration files.
      */
-    public function getDatabasePath( string $path = '' ) : string
+    public function getDatabasePath( ?string $path = '' ) : string
     {
-        return $this->joinPaths( $this->databasePath ?: $this->basePath( 'database' ), $path );
+        return $this->joinPaths( $this->databasePath ?: $this->getBasePath( 'database' ), $path );
     }
 
     /**
@@ -289,7 +289,7 @@ class Application extends Container
      * @param  string|array ...$environments
      * @return string|bool
      */
-    public function environment( string|arrat ...$environments ) : string|bool
+    public function environment( string|array ...$environments ) : string|bool
     {
         if ( count( $environments ) > 0 ) {
             $patterns = is_array( $environments[ 0 ] ) ? $environments[ 0 ] : $environments;
