@@ -32,39 +32,137 @@ namespace Omega\Application;
 interface ApplicationInterface
 {
     /**
-     * Get the version number of application.
+     * Get the version of the application.
      * 
-     * @return string Return the version number of application.
+     * @return string Return the version of the application.
      */
     public function getVersion() : string;
+
     /**
-     * Set the base path for the application.
+     * Get the base path of the OmegaCMS installation.
      * 
-     * @param  string $basePath Holds the base path for the application.
+     * @param  ?string $path Holds the application path.
+     * @return string Return the path of OmegaCMS istallation.
+     */
+    public function getBasePath( ?string $path = '' ) : string;
+
+    /**
+     * Set the base path for OmegaCMS installation.
+     * 
+     * @param  string $basePath Holds the application path.
      * @return $this
      */
     public function setBasePath( string $basePath ) : self;
 
     /**
-     * Get the base path for the application.
+     * Get the path to the bootstrap directory defined by the developer.
      * 
-     * @return string Return the base path for the application.
+     * @param  string $path Holds the custom bootstrap path defined by the developer.
+     * @return string Return the path for bootstrap directory.
      */
-    public function getBasePath() : string;
+    public function getBootstrapPath( ?string $path = '' ) : string;
 
     /**
-     * Get the path to the application configuration folder.
+     * Set bootstrap file directory path.
      * 
-     * @param  ?string $path (Optionally) Holds the path to append config path.
-     * @return string Return the path to the configuration folder. 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setBootstrapPath( string $path ) : self;
+
+    /**
+     * Get the path to the configuration directory defined by the developer.
+     * 
+     * @param  string $path Holds the custom configuration path defined by the developer.
+     * @return string Return the path for the configuration path.
      */
     public function getConfigPath( ?string $path = '' ) : string;
 
     /**
-     * Get the path to the database directory.
+     * Set the configuration directory path.
      * 
-     * @param  ?string $path (Optionally) Holds the path to append database path.
-     * @return string Return the path to the database folder.
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setConfigPath( string $path ) : self;
+
+    /**
+     * Get the path to the database directory defined by the developer.
+     * 
+     * @param  string $path Holds the custom database path defined by the developer.
+     * @return string Return the path for the database files.
      */
     public function getDatabasePath( ?string $path = '' ) : string;
+
+    /**
+     * Set the database diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setDatabasePath( string $path ) : self;
+
+    /**
+     * Get or check the current application environment.
+     * 
+     * @param  string|array ...$environments
+     * @return string|bool
+     */
+    public function environment( string|array ...$environments ) : string|bool;
+
+    /**
+     * Get the path to the language directory defined by the developer.
+     * 
+     * @param  string $path Holds the custom language path defined by the developer.
+     * @return string Return the path to the language file directory.
+     */
+    public function getLangPath( ?string $path = '' ) : string;
+
+    /**
+     * Set the lang diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setLangPath( string $path ) : self;
+
+    /**
+     * Get the path to the public/web directory defined by the developer.
+     * 
+     * @param  string $path Holds the custom public/web path defined by the developer.
+     * @return string Return the path to the public/web path directory.
+     */
+    public function getPublicPath( ?string $path = '' ) : string;
+
+    /**
+     * Set the public diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setPublicPath( string $path ) : self;
+
+    /**
+     * Get the path to the resources directory.
+     * 
+     * @param  ?string $path Holds the application resources path.
+     * @return string Return the path to the resources path directory.
+     */
+    public function getResourcePath( ?string $path = '' ) : string;
+
+    /**
+     * Get the path to the storage directory.
+     * 
+     * @param  string $path Holds the storage path.
+     * @return string Return the path to the storage path directory.
+     */
+    public function getStoragePath( string $path = '' ) : string;
+
+    /**
+     * Set the storage diretory path.
+     * 
+     * @param  string $basePath Holds the application path.
+     * @return $this
+     */
+    public function setStoragePath( string $path ) : self;
 }

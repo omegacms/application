@@ -45,7 +45,7 @@ use Omega\Routing\Router;
  * @license     https://www.gnu.org/licenses/gpl-3.0-standalone.html     GPL V3.0+
  * @version     1.0.0
  */
-class Application extends Container
+class Application extends Container implements ApplicationInterface
 {
     use SingletonTrait;
     //use WebApplicationTrait;
@@ -62,7 +62,7 @@ class Application extends Container
      * 
      * @var ?string $appPath Holds the custom application path defined by developer.
      */
-    protected ?string $applicationPath;
+    protected ?string $appPath;
 
     /**
      * The base path for the OmegaCMS installation.
@@ -84,14 +84,13 @@ class Application extends Container
      * @var ?string $configPath Holds the custom configuration path defined by the developer.
      */
     protected ?string $configPath;
-    #endregion
 
     /**
      * The custom database path defined by the developer.
      * 
      * @var ?string $databasePath Holds the custom database path defined by the develiper.
      */
-    protected ?string $databasePath = '';
+    protected ?string $databasePath;
 
     /**
      * The environment file to load during bootstrapping.
@@ -110,14 +109,14 @@ class Application extends Container
     /**
      * The custom language path defined by the developer.
      * 
-     * @var ?string $environmentPath Holds the custom language path defined by the developer.
+     * @var ?string $langPath Holds the custom language path defined by the developer.
      */
     protected ?string $langPath;
 
     /**
      * The custom public path defined by the developer.
      * 
-     * @var ?string $environmentPath Holds the custom public path defined by the developer.
+     * @var ?string $publicPath Holds the custom public path defined by the developer.
      */
     protected ?string $publicPath;
 
@@ -219,7 +218,7 @@ class Application extends Container
     }
 
     /**
-     * Get the version of the application.
+     * @inheritdoc
      * 
      * @return string Return the version of the application.
      */
@@ -231,18 +230,18 @@ class Application extends Container
     /**
      * Get the path to the application 'app' directory.
      * 
-     * @param  string $path Holds the application path.
+     * @param  ?string $path Holds the application 'app' path.
      * @return string Return the path for 'app' directory.
      */
-    public function getApplicationPath( ?string $path = '' ) : string
+    public function getAppPath( ?string $path = '' ) : string
     {
-        return $this->joinPaths( $this->applicationPath ?: $this->basePath( 'app' ), $path );
+        return $this->joinPaths( $this->appPath ?: $this->basePath( 'app' ), $path );
     }
 
     /**
-     * Get the base path of the OmegaCMS installation.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
+     * @param  ?string $path Holds the application path.
      * @return string Return the path of OmegaCMS istallation.
      */
     public function getBasePath( ?string $path = '' ) : string
@@ -251,10 +250,10 @@ class Application extends Container
     }
 
     /**
-     * Get the path to the bootstrap directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
-     * @return string Return the path for 'app' directory.
+     * @param  string $path Holds the custom bootstrap path defined by the developer.
+     * @return string Return the path for bootstrap directory.
      */
     public function getBootstrapPath( ?string $path = '' ) : string
     {
@@ -262,9 +261,9 @@ class Application extends Container
     }
 
     /**
-     * Get the path to the application configuration files.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
+     * @param  string $path Holds the custom configutation path defined by the developer.
      * @return string Return the path for the configuration files.
      */
     public function getConfigPath( ?string $path = '' ) : string
@@ -273,10 +272,10 @@ class Application extends Container
     }
 
     /**
-     * Get the path to the database directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
-     * @return string Return the path for the configuration files.
+     * @param  string $path Holds the custom dataase path defined by the developer.
+     * @return string Return the path for the database files.
      */
     public function getDatabasePath( ?string $path = '' ) : string
     {
@@ -284,7 +283,7 @@ class Application extends Container
     }
 
     /**
-     * Get or check the current application environment.
+     * @inheritdoc
      * 
      * @param  string|array ...$environments
      * @return string|bool
@@ -331,43 +330,43 @@ class Application extends Container
     }
 
     /**
-     * Get the path to the language file directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
+     * @param  string $path Holds the custom language path defined by the developer.
      * @return string Return the path to the language file directory.
      */
-    public function getLangPath( string $path = '' ) : string
+    public function getLangPath( ?string $path = '' ) : string
     {
         return $this->joinPaths( $this->langPath, $path );
     }
 
     /**
-     * Get the path to the public / web directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
-     * @return string Return the path to the public / web file directory.
+     * @param  string $path Holds the custom public/web path defined by the developer.
+     * @return string Return the path to the public/web path directory.
      */
-    public function getPublicPath( string $path = '' ) : string
+    public function getPublicPath( ?string $path = '' ) : string
     {
         return $this->joinPaths( $this->publicPath ?: $this->basePath( 'public' ), $path );
     }
 
     /**
-     * Get the path to the resources directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
-     * @return string Return the path to the resources file directory.
+     * @param  ?string $path Holds the application resources path.
+     * @return string Return the path to the resources path directory.
      */
-    public function getResourcePath( string $path = '' ) : string
+    public function getResourcePath( ?string $path = '' ) : string
     {
         return $this->joinPaths( $this->basePath( 'resources' ), $path );
     }
 
     /**
-     * Get the path to the public / web directory.
+     * @inheritdoc
      * 
-     * @param  string $path Holds the application path.
-     * @return string Return the path to the storage file directory.
+     * @param  string $path Holds the storage path.
+     * @return string Return the path to the storage path directory.
      */
     public function getStoragePath( string $path = '' ) : string
     {
@@ -399,15 +398,15 @@ class Application extends Container
      * @param  string $path Holds the path to set.
      * @return $this
      */
-    public function setApplicationPath( string $path ) : self
+    public function setAppPath( string $path ) : self
     {
-        $this->applicationPath = $path;
+        $this->appPath = $path;
 
         return $this;
     }
 
     /**
-     * Set the base path for OmegaCMS installation.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -420,7 +419,7 @@ class Application extends Container
     }
 
     /**
-     * Set bootstrap file directory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -433,7 +432,7 @@ class Application extends Container
     }
 
     /**
-     * Set the configuration directory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -446,7 +445,7 @@ class Application extends Container
     }
 
     /**
-     * Set the database diretory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -485,7 +484,7 @@ class Application extends Container
     }
 
     /**
-     * Set the lang diretory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -498,7 +497,7 @@ class Application extends Container
     }
 
     /**
-     * Set the public diretory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
@@ -511,7 +510,7 @@ class Application extends Container
     }
 
     /**
-     * Set the storage diretory path.
+     * @inheritdoc
      * 
      * @param  string $basePath Holds the application path.
      * @return $this
