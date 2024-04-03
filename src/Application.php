@@ -59,38 +59,38 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * The custom application path defined by the developer.
-     * 
-     * @var ?string $appPath Holds the custom application path defined by developer.
+     *
+     * @var string $appPath Holds the custom application path defined by developer.
      */
-    protected ?string $appPath;
+    protected string $appPath;
 
     /**
      * The base path for the OmegaCMS installation.
-     * 
-     * @var ?string $basePath Holds the base path for the OmegaCMS installation.
+     *
+     * @var string $basePath Holds the base path for the OmegaCMS installation.
      */
-    protected ?string $basePath;
+    protected string $basePath;
 
     /**
      * The custom application path defined by the developer.
-     * 
-     * @var ?string $bootstrapPath Holds the custom application path defined by developer.
+     *
+     * @var string $bootstrapPath Holds the custom application path defined by developer.
      */
-    protected ?string $bootstrapPath;
+    protected string $bootstrapPath;
 
     /**
      * The custom configuration path defined by the developer.
-     * 
-     * @var ?string $configPath Holds the custom configuration path defined by the developer.
+     *
+     * @var string $configPath Holds the custom configuration path defined by the developer.
      */
-    protected ?string $configPath;
+    protected string $configPath;
 
     /**
      * The custom database path defined by the developer.
-     * 
-     * @var ?string $databasePath Holds the custom database path defined by the develiper.
+     *
+     * @var string $databasePath Holds the custom database path defined by the develiper.
      */
-    protected ?string $databasePath;
+    protected string $databasePath = '';
 
     /**
      * The environment file to load during bootstrapping.
@@ -101,24 +101,24 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * The custom environment path defined by the developer.
-     * 
-     * @var ?string $environmentPath Holds the custom environment path defined by the developer.
+     *
+     * @var string $environmentPath Holds the custom environment path defined by the developer.
      */
-    protected ?string $environmentPath;
+    protected string $environmentPath;
 
     /**
      * The custom language path defined by the developer.
-     * 
-     * @var ?string $langPath Holds the custom language path defined by the developer.
+     *
+     * @var string $langPath Holds the custom language path defined by the developer.
      */
-    protected ?string $langPath;
+    protected string $langPath;
 
     /**
      * The custom public path defined by the developer.
-     * 
-     * @var ?string $publicPath Holds the custom public path defined by the developer.
+     *
+     * @var string $publicPath Holds the custom public path defined by the developer.
      */
-    protected ?string $publicPath;
+    protected string $publicPath;
 
     /**
      * Application class constructor.
@@ -219,7 +219,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @return string Return the version of the application.
      */
     public function getVersion() : string
@@ -229,62 +229,62 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Get the path to the application 'app' directory.
-     * 
-     * @param  ?string $path Holds the application 'app' path.
+     *
+     * @param  string $path Holds the application 'app' path.
      * @return string Return the path for 'app' directory.
      */
-    public function getAppPath( ?string $path = '' ) : string
+    public function getAppPath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->appPath ?: $this->basePath( 'app' ), $path );
     }
 
     /**
      * @inheritdoc
-     * 
-     * @param  ?string $path Holds the application path.
+     *
+     * @param  string $path Holds the application path.
      * @return string Return the path of OmegaCMS istallation.
      */
-    public function getBasePath( ?string $path = '' ) : string
+    public function getBasePath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->basePath, $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the custom bootstrap path defined by the developer.
      * @return string Return the path for bootstrap directory.
      */
-    public function getBootstrapPath( ?string $path = '' ) : string
+    public function getBootstrapPath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->bootstrapPath, $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the custom configutation path defined by the developer.
      * @return string Return the path for the configuration files.
      */
-    public function getConfigPath( ?string $path = '' ) : string
+    public function getConfigPath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->configPath ?: $this->getBasePath( 'config' ), $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the custom dataase path defined by the developer.
      * @return string Return the path for the database files.
      */
-    public function getDatabasePath( ?string $path = '' ) : string
+    public function getDatabasePath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->databasePath ?: $this->getBasePath( 'database' ), $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string|array ...$environments
      * @return string|bool
      */
@@ -301,7 +301,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Get the environment file the application is using.
-     * 
+     *
      * @return string Return the environment file the application using.
      */
     public function getEnvironmentFile() : string
@@ -311,7 +311,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Get the fully qualified path to the environment file.
-     * 
+     *
      * @return string Return the fully qualified path to the environment file.
      */
     public function getEnvironmentFilePath() : string
@@ -321,7 +321,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Get the path to the environment file directory.
-     * 
+     *
      * @return string Return the path to the environment file directory.
      */
     public function getEnvironmentPath() : string
@@ -331,40 +331,40 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the custom language path defined by the developer.
      * @return string Return the path to the language file directory.
      */
-    public function getLangPath( ?string $path = '' ) : string
+    public function getLangPath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->langPath, $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the custom public/web path defined by the developer.
      * @return string Return the path to the public/web path directory.
      */
-    public function getPublicPath( ?string $path = '' ) : string
+    public function getPublicPath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->publicPath ?: $this->basePath( 'public' ), $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  ?string $path Holds the application resources path.
      * @return string Return the path to the resources path directory.
      */
-    public function getResourcePath( ?string $path = '' ) : string
+    public function getResourcePath( string $path = '' ) : string
     {
         return $this->joinPaths( $this->basePath( 'resources' ), $path );
     }
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $path Holds the storage path.
      * @return string Return the path to the storage path directory.
      */
@@ -379,9 +379,9 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Get the path of the view directory.
-     * 
+     *
      * This method returns the first configured path in the array of view paths.
-     * 
+     *
      * @param  string $path Holds the application path.
      * @return string Return the path to the view directory.
      */
@@ -394,7 +394,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Set the application directory.
-     * 
+     *
      * @param  string $path Holds the path to set.
      * @return $this
      */
@@ -407,7 +407,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -420,7 +420,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -433,7 +433,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -446,7 +446,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -459,7 +459,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Set the environment file to be loading during bootstrapping.
-     * 
+     *
      * @param  string $file Holds the environment file to be loading during bootstrappng.
      * @return $this
      */
@@ -472,7 +472,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Set the environment diretory path.
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -485,7 +485,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -498,7 +498,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -511,7 +511,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @param  string $basePath Holds the application path.
      * @return $this
      */
@@ -524,7 +524,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Determine if the application is in rhe local environment.
-     * 
+     *
      * @return bool Return true if the application is in local environment.
      */
     public function isLocal() : bool
@@ -534,7 +534,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Determine if the application is in the production environment.
-     * 
+     *
      * @return bool Return true if the application is in the production environment.
      */
     public function isProduction() : bool
@@ -544,7 +544,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Detect the application's current environment.
-     * 
+     *
      * @param  Closure $callback
      * @return string
      */
@@ -557,7 +557,7 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * Join the given paths.
-     * 
+     *
      * @param  ?string $basePath Holds the base path to join.
      * @param  string  $path     Holds the path to join.
      * @return string Return the joined paths.
