@@ -22,8 +22,8 @@ namespace Omega\Application;
  * @use
  */
 use function method_exists;
-use function Omega\Helpers\env;
 use function Omega\Helpers\join_paths;
+use Closure;
 use Throwable;
 use Dotenv\Dotenv;
 use Omega\Container\Container;
@@ -62,28 +62,28 @@ class Application extends Container implements ApplicationInterface
      *
      * @var string $appPath Holds the custom application path defined by developer.
      */
-    protected string $appPath;
+    protected string $appPath = '';
 
     /**
      * The base path for the OmegaCMS installation.
      *
      * @var string $basePath Holds the base path for the OmegaCMS installation.
      */
-    protected string $basePath;
+    protected string $basePath = '';
 
     /**
      * The custom application path defined by the developer.
      *
      * @var string $bootstrapPath Holds the custom application path defined by developer.
      */
-    protected string $bootstrapPath;
+    protected string $bootstrapPath = '';
 
     /**
      * The custom configuration path defined by the developer.
      *
      * @var string $configPath Holds the custom configuration path defined by the developer.
      */
-    protected string $configPath;
+    protected string $configPath = '';
 
     /**
      * The custom database path defined by the developer.
@@ -104,21 +104,28 @@ class Application extends Container implements ApplicationInterface
      *
      * @var string $environmentPath Holds the custom environment path defined by the developer.
      */
-    protected string $environmentPath;
+    protected string $environmentPath = '';
 
     /**
      * The custom language path defined by the developer.
      *
      * @var string $langPath Holds the custom language path defined by the developer.
      */
-    protected string $langPath;
+    protected string $langPath = '';
 
     /**
      * The custom public path defined by the developer.
      *
      * @var string $publicPath Holds the custom public path defined by the developer.
      */
-    protected string $publicPath;
+    protected string $publicPath = '';
+
+    /**
+     * The custom storage path defined by the developer.
+     * 
+     * @var string $storagePath Holds the custom storage path defined by the developer.
+     */
+    protected string $storagePath = '';
 
     /**
      * Application class constructor.
@@ -235,7 +242,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getAppPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->appPath ?: $this->basePath( 'app' ), $path );
+        return $this->joinPaths( $this->appPath ?: $this->getBasePath( 'app' ), $path );
     }
 
     /**
@@ -306,7 +313,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getEnvironmentFile() : string
     {
-        return $this-environmentFile ?: '.env';
+        return $this->environmentFile ?: '.env';
     }
 
     /**
@@ -316,7 +323,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getEnvironmentFilePath() : string
     {
-        return $this->environmentPath() . DIRECTORY_SEPARATOR . $this->environmentFile();
+        return $this->getEnvironmentPath() . DIRECTORY_SEPARATOR . $this->getEnvironmentFile();
     }
 
     /**
@@ -348,7 +355,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getPublicPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->publicPath ?: $this->basePath( 'public' ), $path );
+        return $this->joinPaths( $this->publicPath ?: $this->getBasePath( 'public' ), $path );
     }
 
     /**
@@ -359,7 +366,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getResourcePath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->basePath( 'resources' ), $path );
+        return $this->joinPaths( $this->getBasePath( 'resources' ), $path );
     }
 
     /**
@@ -374,7 +381,7 @@ class Application extends Container implements ApplicationInterface
             return $this->joinPaths( $this->storagePath ?: $_ENV[ 'OMEGA_STORAGE_PATH' ], $path );
         }
 
-        return $this->joinPaths( $this->storagePath ?: $this->basePath( 'storage' ), $path );
+        return $this->joinPaths( $this->storagePath ?: $this->getBasePath( 'storage' ), $path );
     }
 
     /**
