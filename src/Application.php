@@ -27,8 +27,10 @@ use Closure;
 use Throwable;
 use Dotenv\Dotenv;
 use Omega\Container\Container;
+use Omega\Environment\EnvironmentDetector;
 use Omega\Http\Response;
 use Omega\Routing\Router;
+use Omega\Support\Str;
 
 /**
  * Base application class.

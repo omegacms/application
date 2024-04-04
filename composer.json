@@ -18,6 +18,7 @@
     "omegacms/container": "^1.0.0",
     "omegacms/http": "^1.0.0",
     "omegacms/routing": "^1.0.0",
+    "omegacms/support": "^1.0.0",
     "vlucas/phpdotenv": "^5.5"
   },
   "require-dev": {
