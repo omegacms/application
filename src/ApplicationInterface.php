@@ -41,8 +41,8 @@ interface ApplicationInterface
     /**
      * Get the base path of the OmegaCMS installation.
      *
-     * @param  ?string $path Holds the application path.
-     * @return string Return the path of OmegaCMS istallation.
+     * @param  string $path Holds the application path.
+     * @return string Return the path of OmegaCMS installation.
      */
     public function getBasePath( string $path = '' ) : string;
 
@@ -65,7 +65,7 @@ interface ApplicationInterface
     /**
      * Set bootstrap file directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setBootstrapPath( string $path ) : self;
@@ -81,7 +81,7 @@ interface ApplicationInterface
     /**
      * Set the configuration directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setConfigPath( string $path ) : self;
@@ -95,9 +95,9 @@ interface ApplicationInterface
     public function getDatabasePath( string $path = '' ) : string;
 
     /**
-     * Set the database diretory path.
+     * Set the database directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setDatabasePath( string $path ) : self;
@@ -119,9 +119,9 @@ interface ApplicationInterface
     public function getLangPath( string $path = '' ) : string;
 
     /**
-     * Set the lang diretory path.
+     * Set the lang directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setLangPath( string $path ) : self;
@@ -135,9 +135,9 @@ interface ApplicationInterface
     public function getPublicPath( string $path = '' ) : string;
 
     /**
-     * Set the public diretory path.
+     * Set the public directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setPublicPath( string $path ) : self;
@@ -145,7 +145,7 @@ interface ApplicationInterface
     /**
      * Get the path to the resources directory.
      *
-     * @param  ?string $path Holds the application resources path.
+     * @param  string $path Holds the application resources path.
      * @return string Return the path to the resources path directory.
      */
     public function getResourcePath( string $path = '' ) : string;
@@ -159,9 +159,9 @@ interface ApplicationInterface
     public function getStoragePath( string $path = '' ) : string;
 
     /**
-     * Set the storage diretory path.
+     * Set the storage directory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setStoragePath( string $path ) : self;

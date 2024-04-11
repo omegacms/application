@@ -50,7 +50,6 @@ use Omega\Support\Str;
 class Application extends Container implements ApplicationInterface
 {
     use SingletonTrait;
-    //use WebApplicationTrait;
 
     /**
      * The Omega framework version.
@@ -187,7 +186,7 @@ class Application extends Container implements ApplicationInterface
      */
     private function bindProviders( string $basePath )
     {
-        $providers = require "{$basePath}/config/providers.php";
+        $providers = require $this->getBasePath() . "/config/providers.php";
 
         foreach ( $providers as $provider ) {
             $instance = new $provider;
@@ -214,7 +213,7 @@ class Application extends Container implements ApplicationInterface
 
         $this->alias( Router::class, fn() => $router );
 
-        $routes = require "{$basePath}/routes/web.php";
+        $routes = require $this->getBasePath() . "/routes/web.php";
         $routes( $router );
 
         $response = $router->dispatch();

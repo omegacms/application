@@ -25,7 +25,7 @@ use function get_called_class;
 use Omega\Application\Exceptions\SingletonException;
 
 /**
- * Singleton trai.
+ * Singleton trait.
  *
  * The `SingletonTrait`  encapsulates a  design pattern  used to ensure  that  a class has only one
  * instance and provides a  global point of access to  that instance.  By incorporating  this trait
