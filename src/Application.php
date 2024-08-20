@@ -22,6 +22,7 @@ namespace Omega\Application;
  * @use
  */
 use function method_exists;
+use function Omega\Helpers\config;
 use function Omega\Helpers\join_paths;
 use Closure;
 use Throwable;
@@ -123,10 +124,17 @@ class Application extends Container implements ApplicationInterface
 
     /**
      * The custom storage path defined by the developer.
-     * 
+     *
      * @var string $storagePath Holds the custom storage path defined by the developer.
      */
     protected string $storagePath = '';
+
+    /**
+     * Application configuration.
+     *
+     * @var array $app Holds the application configuration.
+     */
+	private array $app = [];
 
     /**
      * Application class constructor.
@@ -141,6 +149,11 @@ class Application extends Container implements ApplicationInterface
         }
 
         $this->alias( 'paths.base', fn() => $this->getBasePath() );
+
+		$this->app = require $this->getBasePath() . '/config/app.php';
+
+		// Set the timezone during the application start
+		date_default_timezone_set( $this->app[ 'timezone' ] );
 
         $this->configure( $this->getBasePath() );
         $this->bindProviders( $this->getBasePath() );
@@ -574,4 +587,20 @@ class Application extends Container implements ApplicationInterface
     {
         return join_paths( $basePath, $path );
     }
+
+	/**
+ 	 * Sets the default timezone for the application.
+ 	 *
+ 	 * This method reads the timezone from the application configuration and sets it
+ 	 * as the default timezone for all date and time operations within the application.
+ 	 *
+ 	 * @return $this Returns a reference to the current object for method chaining.
+ 	 */
+    public function setTimeZone()
+    {
+		date_default_timezone_set( $this->app[ 'timezone' ] );
+
+		return date( 'Y-m-d H:i:s', time() );
+    }
 }
+
