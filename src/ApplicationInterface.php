@@ -165,4 +165,14 @@ interface ApplicationInterface
      * @return $this
      */
     public function setStoragePath( string $path ) : self;
+
+    /**
+ 	 * Sets the default timezone for the application.
+ 	 *
+ 	 * This method reads the timezone from the application configuration and sets it
+ 	 * as the default timezone for all date and time operations within the application.
+ 	 *
+ 	 * @return $this Returns a reference to the current object for method chaining.
+ 	 */
+      public function setTimeZone();
 }
