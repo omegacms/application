@@ -22,8 +22,6 @@ namespace Omega\Application;
  * @use
  */
 use function method_exists;
-use function Omega\Helpers\config;
-use function Omega\Helpers\join_paths;
 use Closure;
 use Throwable;
 use Dotenv\Dotenv;
