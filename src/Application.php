@@ -24,8 +24,8 @@ namespace Omega\Application;
 use function method_exists;
 use Closure;
 use Throwable;
-use Dotenv\Dotenv;
 use Omega\Container\Container;
+use Omega\Environment\Dotenv;
 use Omega\Environment\EnvironmentDetector;
 use Omega\Http\Response;
 use Omega\Routing\Router;
@@ -182,8 +182,7 @@ class Application extends Container implements ApplicationInterface
      */
     private function configure( string $basePath ) : void
     {
-        $dotenv = Dotenv::createImmutable( $basePath );
-        $dotenv->load();
+        Dotenv::load( $basePath );
     }
 
     /**
