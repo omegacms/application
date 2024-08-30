@@ -55,7 +55,7 @@ class Application extends Container implements ApplicationInterface
      *
      * @var string
      */
-    private const VERSION = '1.0.0';
+    protected const VERSION = '1.0.0';
 
     /**
      * The custom application path defined by the developer.
@@ -130,7 +130,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * Application configuration.
      *
-     * @var array $app Holds the application configuration.
+     * @var array<string, string> $app Holds the application configuration.
      */
 	private array $app = [];
 
@@ -303,18 +303,24 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string|array ...$environments
-     * @return string|bool
+     * This method allows you to either retrieve the current environment or check if the application is running in a specific environment.
+     * 
+     * @param  string|string[] ...$environments One or more environment names to check against the current environment.
+     * 
+     * If no parameters are provided, the method returns the current environment as a string.
+     * If one or more environment names are provided, the method returns `true` if the current environment matches any of the provided names; otherwise, it returns `false`.
+     * 
+     * @return string|bool The current environment as a string if no parameters are provided; `true` or `false` if checking against the provided environments.
      */
     public function environment( string|array ...$environments ) : string|bool
     {
         if ( count( $environments ) > 0 ) {
             $patterns = is_array( $environments[ 0 ] ) ? $environments[ 0 ] : $environments;
 
-            return Str::is( $patterns, $this[ 'env' ] );
+            return Str::is( $patterns, $this->app[ 'env' ] );
         }
 
-        return $this[ 'env' ];
+        return $this->app[ 'env' ];
     }
 
     /**
@@ -372,7 +378,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  ?string $path Holds the application resources path.
+     * @param  string $path Holds the application resources path.
      * @return string Return the path to the resources path directory.
      */
     public function getResourcePath( string $path = '' ) : string
@@ -393,21 +399,6 @@ class Application extends Container implements ApplicationInterface
         }
 
         return $this->joinPaths( $this->storagePath ?: $this->getBasePath( 'storage' ), $path );
-    }
-
-    /**
-     * Get the path of the view directory.
-     *
-     * This method returns the first configured path in the array of view paths.
-     *
-     * @param  string $path Holds the application path.
-     * @return string Return the path to the view directory.
-     */
-    public function getViewPath( string $path = '' ) : string
-    {
-        $viewPath = rtrim( $this[ 'config' ]->get( 'view.paths' )[ 0 ], DIRECTORY_SEPARATOR );
-
-        return $this->joinPaths( $viewPath, $path );
     }
 
     /**
@@ -439,7 +430,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setBootstrapPath( string $path ) : self
@@ -452,7 +443,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setConfigPath( string $path ) : self
@@ -465,7 +456,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setDatabasePath( string $path ) : self
@@ -491,7 +482,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * Set the environment diretory path.
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setEnvironmentPath( string $path ) : self
@@ -504,7 +495,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setLangPath( string $path ) : self
@@ -517,7 +508,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setPublicPath( string $path ) : self
@@ -530,7 +521,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $basePath Holds the application path.
+     * @param  string $path Holds the application path.
      * @return $this
      */
     public function setStoragePath( string $path ) : self
@@ -547,7 +538,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function isLocal() : bool
     {
-        return $this[ 'env' ] === 'local';
+        return $this->app[ 'env' ] === 'local';
     }
 
     /**
@@ -557,7 +548,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function isProduction() : bool
     {
-        return $this[ 'env' ] === 'production';
+        return $this->app[ 'env' ] === 'production';
     }
 
     /**
@@ -570,7 +561,7 @@ class Application extends Container implements ApplicationInterface
     {
         $args = $_SERVER[ 'argv' ] ?? null;
 
-        return $this[ 'env' ] = ( new EnvironmentDetector )->detect( $callback, $args );
+        return $this->app[ 'env' ] = ( new EnvironmentDetector )->detect( $callback, $args );
     }
 
     /**
@@ -582,22 +573,34 @@ class Application extends Container implements ApplicationInterface
      */
     public function joinPaths( ?string $basePath, string $path = '' ) : string
     {
+        $basePath = $basePath ??'';
+
         return join_paths( $basePath, $path );
     }
 
 	/**
- 	 * Sets the default timezone for the application.
+ 	 * @inheritdoc
  	 *
  	 * This method reads the timezone from the application configuration and sets it
  	 * as the default timezone for all date and time operations within the application.
  	 *
  	 * @return $this Returns a reference to the current object for method chaining.
  	 */
-    public function setTimeZone()
+    public function setCurrentTimeZone() : self
     {
 		date_default_timezone_set( $this->app[ 'timezone' ] );
 
-		return date( 'Y-m-d H:i:s', time() );
+		return $this;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return string The formatted current date and time.
+     */
+    public function getCurrentTimeZone() : string
+    {
+        return date( 'Y-m-d H:i:s', time() );
     }
 }
 

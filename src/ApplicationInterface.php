@@ -105,8 +105,14 @@ interface ApplicationInterface
     /**
      * Get or check the current application environment.
      *
-     * @param  string|array ...$environments
-     * @return string|bool
+     * This method allows you to either retrieve the current environment or check if the application is running in a specific environment.
+     * 
+     * @param  string|string[] ...$environments One or more environment names to check against the current environment.
+     * 
+     * If no parameters are provided, the method returns the current environment as a string.
+     * If one or more environment names are provided, the method returns `true` if the current environment matches any of the provided names; otherwise, it returns `false`.
+     * 
+     * @return string|bool The current environment as a string if no parameters are provided; `true` or `false` if checking against the provided environments.
      */
     public function environment( string|array ...$environments ) : string|bool;
 
@@ -166,7 +172,7 @@ interface ApplicationInterface
      */
     public function setStoragePath( string $path ) : self;
 
-    /**
+	/**
  	 * Sets the default timezone for the application.
  	 *
  	 * This method reads the timezone from the application configuration and sets it
@@ -174,5 +180,12 @@ interface ApplicationInterface
  	 *
  	 * @return $this Returns a reference to the current object for method chaining.
  	 */
-      public function setTimeZone();
+      public function setCurrentTimeZone() : self;
+  
+      /**
+       * Gets the current date and time formatted according to the application timezone.
+       *
+       * @return string The formatted current date and time.
+       */
+      public function getCurrentTimeZone() : string;
 }

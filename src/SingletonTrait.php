@@ -45,9 +45,9 @@ trait SingletonTrait
     /**
      * Singleton instance.
      *
-     * @var mixed $instances Holds the singleton instances.
+     * @var static[] $instances Holds the singleton instances.
      */
-    private static mixed $instances;
+    private static array $instances;
 
     /**
      * Get the singleton instance.
@@ -56,9 +56,9 @@ trait SingletonTrait
      * doesn't exist, it creates one and returns it.
      *
      * @param  ?string $basePath Holds the Omega application base path or null.
-     * @return mixed Return the singleton instance.
+     * @return static Return the singleton instance.
      */
-    public static function getInstance( ?string $basePath = null ) : mixed
+    public static function getInstance( ?string $basePath = null ) : static
     {
         $getCalledClass = get_called_class();
 
