@@ -20,19 +20,9 @@
     "omegacms/routing": "^1.0.0",
     "omegacms/support": "^1.0.0"
   },
-  "require-dev": {
-    "omegacms/testing": "^1.0.0",
-    "phpunit/phpunit": "^10.3",
-    "phpstan/phpstan": "^1.12"
-  },
   "autoload": {
     "psr-4": {
       "Omega\\Application\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Omega\\Application\\Tests\\": "tests/"
     }
   },
   "scripts": {
