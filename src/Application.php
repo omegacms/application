@@ -29,6 +29,8 @@ use Omega\Environment\Dotenv;
 use Omega\Environment\EnvironmentDetector;
 use Omega\Http\Response;
 use Omega\Routing\Router;
+use Omega\Support\Facades\AliasLoader;
+use Omega\Support\Singleton\SingletonTrait;
 use Omega\Support\Str;
 
 /**
@@ -155,6 +157,7 @@ class Application extends Container implements ApplicationInterface
 
         $this->configure( $this->getBasePath() );
         $this->bindProviders( $this->getBasePath() );
+        $this->registerFacades();
     }
 
     /**
@@ -196,7 +199,8 @@ class Application extends Container implements ApplicationInterface
      */
     private function bindProviders( string $basePath )
     {
-        $providers = require $this->getBasePath() . "/config/providers.php";
+        $config = require $this->getBasePath() . "/config/app.php";
+        $providers = $config[ 'providers' ];
 
         foreach ( $providers as $provider ) {
             $instance = new $provider;
@@ -205,6 +209,14 @@ class Application extends Container implements ApplicationInterface
                 $instance->bind( $this );
             }
         }
+    }
+
+    private function registerFacades() : void
+    {
+        $config  = require $this->getBasePath() . '/config/app.php';
+        $aliases = $config[ 'facades' ];
+
+        AliasLoader::getInstance( $aliases )->load();
     }
 
     /**
@@ -253,7 +265,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getAppPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->appPath ?: $this->getBasePath( 'app' ), $path );
+        return $this->getJoinPaths( $this->appPath ?: $this->getBasePath( 'app' ), $path );
     }
 
     /**
@@ -264,7 +276,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getBasePath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->basePath, $path );
+        return $this->getJoinPaths( $this->basePath, $path );
     }
 
     /**
@@ -275,7 +287,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getBootstrapPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->bootstrapPath, $path );
+        return $this->getJoinPaths( $this->bootstrapPath, $path );
     }
 
     /**
@@ -286,7 +298,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getConfigPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->configPath ?: $this->getBasePath( 'config' ), $path );
+        return $this->getJoinPaths( $this->configPath ?: $this->getBasePath( 'config' ), $path );
     }
 
     /**
@@ -297,7 +309,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getDatabasePath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->databasePath ?: $this->getBasePath( 'database' ), $path );
+        return $this->getJoinPaths( $this->databasePath ?: $this->getBasePath( 'database' ), $path );
     }
 
     /**
@@ -361,7 +373,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getLangPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->langPath, $path );
+        return $this->getJoinPaths( $this->langPath, $path );
     }
 
     /**
@@ -372,7 +384,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getPublicPath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->publicPath ?: $this->getBasePath( 'public' ), $path );
+        return $this->getJoinPaths( $this->publicPath ?: $this->getBasePath( 'public' ), $path );
     }
 
     /**
@@ -383,7 +395,7 @@ class Application extends Container implements ApplicationInterface
      */
     public function getResourcePath( string $path = '' ) : string
     {
-        return $this->joinPaths( $this->getBasePath( 'resources' ), $path );
+        return $this->getJoinPaths( $this->getBasePath( 'resources' ), $path );
     }
 
     /**
@@ -395,10 +407,10 @@ class Application extends Container implements ApplicationInterface
     public function getStoragePath( string $path = '' ) : string
     {
         if ( isset( $_ENV[ 'OMEGA_STORAGE_PATH' ] ) ) {
-            return $this->joinPaths( $this->storagePath ?: $_ENV[ 'OMEGA_STORAGE_PATH' ], $path );
+            return $this->getJoinPaths( $this->storagePath ?: $_ENV[ 'OMEGA_STORAGE_PATH' ], $path );
         }
 
-        return $this->joinPaths( $this->storagePath ?: $this->getBasePath( 'storage' ), $path );
+        return $this->getJoinPaths( $this->storagePath ?: $this->getBasePath( 'storage' ), $path );
     }
 
     /**
@@ -571,11 +583,33 @@ class Application extends Container implements ApplicationInterface
      * @param  string  $path     Holds the path to join.
      * @return string Return the joined paths.
      */
-    public function joinPaths( ?string $basePath, string $path = '' ) : string
+    public function getJoinPaths( ?string $basePath, string $path = '' ) : string
     {
         $basePath = $basePath ??'';
 
-        return join_paths( $basePath, $path );
+        return $this->joinPaths( $basePath, $path );
+    }
+
+    /**
+     * Join the given path.
+     *
+     * Concatenates a base path with additional paths and returns the result.
+     *
+     * @param  ?string $basePath Holds the base path to join.
+     * @param  string  ...$paths Holds the paths to join.
+     * @return string Return the joined paths.
+     */
+    public function joinPaths( ?string $basePath, string ...$paths ) : string
+    {
+        foreach ( $paths as $index => $path ) {
+            if ( empty( $path ) ) {
+                unset( $paths[ $index ] );
+            } else {
+                $paths[ $index ] = DIRECTORY_SEPARATOR . ltrim( $path, DIRECTORY_SEPARATOR );
+            }
+        }
+
+        return $basePath . implode( '', $paths );
     }
 
 	/**
