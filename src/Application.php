@@ -25,11 +25,12 @@ use function method_exists;
 use Closure;
 use Throwable;
 use Omega\Container\Container;
+use Omega\Container\ServiceProvider\ServiceProviderInterface;
 use Omega\Environment\Dotenv;
 use Omega\Environment\EnvironmentDetector;
 use Omega\Http\Response;
-use Omega\Routing\Router;
 use Omega\Support\Facades\AliasLoader;
+use Omega\Support\Facades\Router;
 use Omega\Support\Singleton\SingletonTrait;
 use Omega\Support\Str;
 
@@ -204,8 +205,7 @@ class Application extends Container implements ApplicationInterface
 
         foreach ( $providers as $provider ) {
             $instance = new $provider;
-
-            if ( method_exists( $instance, 'bind' ) ) {
+            if ( $instance instanceof ServiceProviderInterface ) {
                 $instance->bind( $this );
             }
         }
@@ -231,14 +231,10 @@ class Application extends Container implements ApplicationInterface
      */
     private function dispatch( string $basePath ) : Response
     {
-        $router = new Router();
-
-        $this->alias( Router::class, fn() => $router );
-
         $routes = require $this->getBasePath() . "/routes/web.php";
-        $routes( $router );
+        $routes( Router::class );
 
-        $response = $router->dispatch();
+        $response = Router::dispatch();
 
         if ( ! $response instanceof Response ) {
             $response = $this->resolve( 'response' )->content( $response );
