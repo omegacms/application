@@ -29,8 +29,8 @@ use Omega\Container\ServiceProvider\ServiceProviderInterface;
 use Omega\Environment\Dotenv;
 use Omega\Environment\EnvironmentDetector;
 use Omega\Http\Response;
-use Omega\Support\Facades\AliasLoader;
-use Omega\Support\Facades\Router;
+use Omega\Support\Facade\AliasLoader;
+use Omega\Support\Facade\Facades\Router;
 use Omega\Support\Singleton\SingletonTrait;
 use Omega\Support\Str;
 
