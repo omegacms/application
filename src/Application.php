@@ -42,7 +42,7 @@ use Omega\Support\Str;
  * handling HTTP requests.
  *
  * @category    Omega
- * @package     Omega\Application
+ * @package     Application
  * @link        https://omegacms.github.io
  * @author      Adriano Giovannini <omegacms@outlook.com>
  * @copyright   Copyright (c) 2024 Adriano Giovannini. (https://omegacms.github.io)
@@ -150,11 +150,11 @@ class Application extends Container implements ApplicationInterface
         }
 
         $this->alias( 'paths.base', fn() => $this->getBasePath() );
-
-		$this->app = require $this->getBasePath() . '/config/app.php';
-
-		// Set the timezone during the application start
-		date_default_timezone_set( $this->app[ 'timezone' ] );
+        
+        $this->app = require $this->getBasePath() . '/config/app.php';
+        
+        // Set the timezone during the application start
+        date_default_timezone_set( $this->app[ 'timezone' ] );
 
         $this->configure( $this->getBasePath() );
         $this->bindProviders( $this->getBasePath() );
