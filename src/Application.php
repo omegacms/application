@@ -91,7 +91,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * The custom database path defined by the developer.
      *
-     * @var string $databasePath Holds the custom database path defined by the develiper.
+     * @var string $databasePath Holds the custom database path defined by the developer.
      */
     protected string $databasePath = '';
 
@@ -268,7 +268,7 @@ class Application extends Container implements ApplicationInterface
      * @inheritdoc
      *
      * @param  string $path Holds the application path.
-     * @return string Return the path of OmegaCMS istallation.
+     * @return string Return the path of OmegaCMS installation.
      */
     public function getBasePath( string $path = '' ) : string
     {
@@ -289,7 +289,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $path Holds the custom configutation path defined by the developer.
+     * @param  string $path Holds the custom configuration path defined by the developer.
      * @return string Return the path for the configuration files.
      */
     public function getConfigPath( string $path = '' ) : string
@@ -300,7 +300,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * @inheritdoc
      *
-     * @param  string $path Holds the custom dataase path defined by the developer.
+     * @param  string $path Holds the custom database path defined by the developer.
      * @return string Return the path for the database files.
      */
     public function getDatabasePath( string $path = '' ) : string
@@ -477,7 +477,7 @@ class Application extends Container implements ApplicationInterface
     /**
      * Set the environment file to be loading during bootstrapping.
      *
-     * @param  string $file Holds the environment file to be loading during bootstrappng.
+     * @param  string $file Holds the environment file to be loading during bootstrapping.
      * @return $this
      */
     public function setEnvironmentFile( string $file ) : self
@@ -488,7 +488,7 @@ class Application extends Container implements ApplicationInterface
     }
 
     /**
-     * Set the environment diretory path.
+     * Set the environment directory path.
      *
      * @param  string $path Holds the application path.
      * @return $this
