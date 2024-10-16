@@ -1,11 +1,13 @@
 <?php
 /**
  * Part of Omega CMS - Application Package
+ * php version 8.3
  *
  * @link       https://omegacms.github.io
  * @author     Adriano Giovannini <omegacms@outlook.com>
  * @copyright  Copyright (c) 2024 Adriano Giovannini. (https://omegacms.github.io)
  * @license    https://www.gnu.org/licenses/gpl-3.0-standalone.html     GPL V3.0+
+ * @version    
  */
 
 /**
@@ -150,9 +152,9 @@ class Application extends Container implements ApplicationInterface
         }
 
         $this->alias( 'paths.base', fn() => $this->getBasePath() );
-        
+
         $this->app = require $this->getBasePath() . '/config/app.php';
-        
+
         // Set the timezone during the application start
         date_default_timezone_set( $this->app[ 'timezone' ] );
 
@@ -312,12 +314,12 @@ class Application extends Container implements ApplicationInterface
      * @inheritdoc
      *
      * This method allows you to either retrieve the current environment or check if the application is running in a specific environment.
-     * 
+     *
      * @param  string|string[] ...$environments One or more environment names to check against the current environment.
-     * 
+     *
      * If no parameters are provided, the method returns the current environment as a string.
      * If one or more environment names are provided, the method returns `true` if the current environment matches any of the provided names; otherwise, it returns `false`.
-     * 
+     *
      * @return string|bool The current environment as a string if no parameters are provided; `true` or `false` if checking against the provided environments.
      */
     public function environment( string|array ...$environments ) : string|bool
